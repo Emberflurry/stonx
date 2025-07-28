@@ -34,7 +34,7 @@ def add_prices_to_oip(oip_df):
                 fprice_date = hist.index[hist.index.get_indexer([fdate], method='nearest')[0] -1]
                 #off by ONE day again, need to subtract 1. lol. bruh
                 df.at[idx, 'filing_price'] = hist.loc[fprice_date].iloc[0]
-            except:
+            except Exception as e:
                 df.at[idx, 'filing_price'] = None
                 failedtickers.append(ticker)
                 innerdict = {'lvl': 'iterfilingprice2','fdate':fdate, 'fprice_date':fprice_date,
@@ -47,7 +47,7 @@ def add_prices_to_oip(oip_df):
                 #^minus one because it seems to shift 1d too far forward for some reason. manually checked ag yf
                 df.at[idx,'mebuy_pricedateQ'] = mprice_date
                 df.at[idx, 'mebuy_price'] = hist.loc[mprice_date].iloc[0]
-            except:
+            except Exception as e:
                 df.at[idx, 'mebuy_price'] = None
                 failedtickers.append(ticker)
                 innerdict = {'lvl': 'itermebuyprice2','mdate':mdate, 'mprice_date':mprice_date,
