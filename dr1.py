@@ -8,9 +8,11 @@ from train_rf_forward_return_model import train_rf_forward_return_model
 from plot_predicted_vs_actual import plot_predicted_vs_actual
 from run_rf_model_for_all_forward_returns import run_rf_model_for_all_forward_returns
 import pandas as pd
+import time
 from single_positrader import single_positrader
 from simulate_all_tickers import simulate_all_tickers
-
+print("=== START OF INTERNAL TESTING ===")
+runtime_start = time.time()
 
 
 oiurl = 'http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=-1&fdr=05%2F01%2F2022+-+05%2F01%2F2023&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=1000&page=1'
@@ -88,6 +90,7 @@ summary_df = simulate_all_tickers(
 )
 
 print('=== END OF INTERNAL TESTING ===')
+print('internal testing time(s):', time.time() - runtime_start)
 #INTERNAL TESTING ABOVE
 
 
@@ -127,3 +130,7 @@ print(f'#tickers w ZERO pnl: {len(results_new[results_new['pnl'] == 0])}')
 print(f'#trades contrib2 POS ret: {results_new[results_new['pnl'] > 0]['num_trades'].sum()}')
 print(f'#trades contrib2 NEG ret: {results_new[results_new['pnl'] < 0]['num_trades'].sum()}')
 print(f'#trades contrib2 ZERO ret: {results_new[results_new['pnl'] == 0]['num_trades'].sum()}')
+
+print("=== END OF EXTERNAL TESTING ===")
+runtime_end = time.time()
+print(f"Total runtime: {runtime_end - runtime_start:.2f} seconds")

@@ -7,7 +7,7 @@ from single_positrader import single_positrader
 def simulate_all_tickers(df, model,ticker_counts, forward_price_col='p_p5_td', 
                          return_col='r_p5_td', verbose=True,buymag=100,
                          plot=False):
-    ''' sim trades by ticker, across all insider trade data undropped
+    ''' sim trades by ticker, across all insider trade data undropped.
     buymag not variable, val = "x WORTH of shares" to buy, NOT #
     '''
     tickers = df['ticker'].unique()

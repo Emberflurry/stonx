@@ -22,7 +22,7 @@ def add_relative_prices(df, mebuy_col='mebuydate', ticker_col='ticker',windows=[
         min_date = df[df[ticker_col] == ticker][mebuy_col].min() - pd.Timedelta(days=500)
         max_date = df[df[ticker_col] == ticker][mebuy_col].max() + pd.Timedelta(days=500)
         try:
-            hist = yf.download(ticker, start=min_date, end=max_date, progress=False)['Close']
+            hist = yf.download(ticker, start=min_date, end=max_date, progress=False,auto_adjust=True)['Close']
             hist = hist.sort_index()
             ticker_price_data[ticker] = hist
         except Exception as e:
