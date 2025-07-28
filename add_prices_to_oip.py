@@ -2,9 +2,11 @@
 #get market pricing for insider trade date data
 import yfinance as yf
 import pandas as pd
+import re
+
 def add_prices_to_oip(oip_df):
     failedtickers = []
-    failed_dict = {}
+    failed_dict = dict()
     df = oip_df.copy()
     df['filing_date'] = pd.to_datetime(df['filing_date'], errors='coerce')
     df['mebuydate'] = pd.to_datetime(df['mebuydate'], errors='coerce')
@@ -12,7 +14,18 @@ def add_prices_to_oip(oip_df):
     df['filing_price'] = None
     df['mebuy_price'] = None
     
-    for ticker in df['ticker'].unique():
+
+    # Define a regex pattern for valid ticker symbols: e.g., AAPL, MSFT, BRK.B
+    ticker_pattern = re.compile(r"^[A-Z0-9.\-]{1,10}$")
+    def is_valid_ticker(x):
+        return isinstance(x, str) and bool(ticker_pattern.match(x))
+    # Store invalid tickers (for checking)
+    invalid_tickers = df['ticker'][~df['ticker'].apply(is_valid_ticker)].unique().tolist()
+    # Keep only valid tickers
+    valid_tickers = df['ticker'][df['ticker'].apply(is_valid_ticker)].astype(str).unique()
+
+    for ticker in valid_tickers : #og df['ticker'].unique()
+        #print(ticker)
         try:
             df_ticker = df[df['ticker'] == ticker]
             min_date = df_ticker[['filing_date', 'mebuydate']].min().min() - pd.Timedelta(days=5)
@@ -54,6 +67,6 @@ def add_prices_to_oip(oip_df):
                             'company_name': df.loc[df['ticker'] == ticker, 'company_name'].iloc[0] ,'error': str(e)}
                 failed_dict[ticker] = innerdict
 
-    return df,failedtickers,failed_dict
+    return df,invalid_tickers,failedtickers,failed_dict
 # oip_with_prices,failedtickers = add_prices_to_oip(oip)
 # failedtickersunique = list(set(failedtickers))
