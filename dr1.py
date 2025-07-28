@@ -1,4 +1,4 @@
-#5/01/22 - 23
+# dr1.py
 from get_oip_1p import get_oip_1p
 from add_prices_to_oip import add_prices_to_oip
 from remove_failed_tickers import remove_failed_tickers
@@ -11,10 +11,11 @@ import pandas as pd
 import time
 from single_positrader import single_positrader
 from simulate_all_tickers import simulate_all_tickers
+import matplotlib.pyplot as plt
 print("=== START OF INTERNAL TESTING ===")
 runtime_start = time.time()
 
-
+#5/01/22 - 23
 oiurl = 'http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=-1&fdr=05%2F01%2F2022+-+05%2F01%2F2023&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=1000&page=1'
 oip = get_oip_1p(oiurl)
 
