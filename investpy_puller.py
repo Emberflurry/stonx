@@ -1,3 +1,4 @@
+#FAILED - blocked API call 403
 from investiny import search_assets
 
 res = search_assets(query='CSTR',limit=1,
