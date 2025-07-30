@@ -1,0 +1,66 @@
+ticker,lvl,mdate,mprice_date,company_name,error
+FOMC,itermebuyprice2,2023-04-27 16:27:32,2023-05-02,"Fomo Worldwide, Inc.",index -2 is out of bounds for axis 0 with size 0
+CSTR,itermebuyprice2,2023-05-02 17:16:51,2023-04-25,"Capstar Financial Holdings, Inc.",index -2 is out of bounds for axis 0 with size 0
+SMMF,itermebuyprice2,2023-05-02 16:41:26,2023-04-28,"Summit Financial Group, Inc.",index -2 is out of bounds for axis 0 with size 0
+HMNF,itermebuyprice2,2023-03-25 15:43:09,2023-05-02,Hmn Financial Inc,index -2 is out of bounds for axis 0 with size 0
+CVCY,itermebuyprice2,2023-04-29 14:01:19,2023-04-28,Central Valley Community Bancorp,index -2 is out of bounds for axis 0 with size 0
+BECN,itermebuyprice2,2023-04-29 17:42:59,2023-04-28,Beacon Roofing Supply Inc,index -2 is out of bounds for axis 0 with size 0
+SCWX,itermebuyprice2,2023-03-25 16:13:37,2023-04-28,Secureworks Corp,index -2 is out of bounds for axis 0 with size 0
+NEP,itermebuyprice2,2023-04-29 16:04:37,2023-04-28,"Nextera Energy Partners, LP",index -2 is out of bounds for axis 0 with size 0
+BCOV,itermebuyprice2,2023-03-29 16:16:13,2023-04-19,Brightcove Inc,index -2 is out of bounds for axis 0 with size 0
+AHNR,itermebuyprice2,2023-04-27 18:24:00,2023-04-05,Athena Gold Corp,index -2 is out of bounds for axis 0 with size 0
+AULT,itermebuyprice2,2023-04-25 19:05:33,2023-03-31,"Ault Alliance, Inc.",index -2 is out of bounds for axis 0 with size 0
+HHC,itermebuyprice2,2023-03-28 17:29:17,2023-04-06,Howard Hughes Corp,index -2 is out of bounds for axis 0 with size 0
+SFT,itermebuyprice2,2023-04-27 17:01:32,2023-03-30,"Shift Technologies, Inc.",index -2 is out of bounds for axis 0 with size 0
+FSNB,itermebuyprice2,2023-04-26 21:22:20,2023-03-27,Fusion Acquisition Corp. II,index -2 is out of bounds for axis 0 with size 0
+CEMI,itermebuyprice2,2023-04-07 21:37:34,2023-03-27,"Chembio Diagnostics, Inc.",index -2 is out of bounds for axis 0 with size 0
+QGNC,itermebuyprice2,2023-04-26 16:12:36,2023-04-20,Community Trust Bancorp Inc /Ky/,index -2 is out of bounds for axis 0 with size 0
+WMPN,itermebuyprice2,2023-04-26 12:07:48,2023-04-26,William Penn Bancorporation,index -2 is out of bounds for axis 0 with size 0
+SDIG,itermebuyprice2,2023-04-25 21:48:54,2023-04-26,"Stronghold Digital Mining, Inc.",index -2 is out of bounds for axis 0 with size 0
+CYTH,itermebuyprice2,2023-04-25 10:27:25,2023-04-24,"Cyclo Therapeutics, Inc.",index -2 is out of bounds for axis 0 with size 0
+AUGX,itermebuyprice2,2023-04-22 21:53:29,2023-04-18,"Augmedix, Inc.",index -2 is out of bounds for axis 0 with size 0
+MICS,itermebuyprice2,2023-03-30 16:30:13,2023-04-18,Singing Machine Co Inc,index -2 is out of bounds for axis 0 with size 0
+VBHI,itermebuyprice2,2023-04-22 12:17:01,2023-04-21,"Verde Bio Holdings, Inc.",index -2 is out of bounds for axis 0 with size 0
+AMAM,itermebuyprice2,2023-04-18 17:46:21,2023-04-20,Ambrx Biopharma Inc.,index -2 is out of bounds for axis 0 with size 0
+ADEX.,itermebuyprice2,2023-04-21 16:30:18,2023-04-20,Adit Edtech Acquisition Corp.,index -2 is out of bounds for axis 0 with size 0
+JOAN,itermebuyprice2,2023-04-19 08:53:21,2023-04-19,Joann Inc.,index -2 is out of bounds for axis 0 with size 0
+ONCT,itermebuyprice2,2023-04-15 06:00:10,2023-04-13,"Oncternal Therapeutics, Inc.",index -2 is out of bounds for axis 0 with size 0
+MLCT,itermebuyprice2,2023-04-14 18:18:28,2023-04-13,"Malachite Innovations, Inc.",index -2 is out of bounds for axis 0 with size 0
+USBL,itermebuyprice2,2023-04-14 17:25:09,2023-04-13,United States Basketball League Inc,index -2 is out of bounds for axis 0 with size 0
+SFE,itermebuyprice2,2023-04-14 16:56:46,2023-04-05,Safeguard Scientifics Inc,index -2 is out of bounds for axis 0 with size 0
+PATI,itermebuyprice2,2023-03-28 12:35:51,2023-03-23,"Patriot Transportation Holding, Inc.",index -2 is out of bounds for axis 0 with size 0
+MTRY,itermebuyprice2,2023-04-12 20:00:28,2023-03-24,Monterey Innovation Acquisition Corp,index -2 is out of bounds for axis 0 with size 0
+OBSV,itermebuyprice2,2023-04-12 16:02:23,2023-04-06,Obseva Sa,index -2 is out of bounds for axis 0 with size 0
+BSTG,itermebuyprice2,2023-04-11 17:00:08,2023-04-11,"Biostage, Inc.",index -2 is out of bounds for axis 0 with size 0
+NOGN,itermebuyprice2,2023-04-11 16:05:17,2023-04-11,"Nogin, Inc.",index -2 is out of bounds for axis 0 with size 0
+COOL,itermebuyprice2,2023-04-11 12:04:19,2023-04-11,Corner Growth Acquisition Corp.,index -2 is out of bounds for axis 0 with size 0
+PRDS,itermebuyprice2,2023-04-07 21:08:12,2023-03-24,"Pardes Biosciences, Inc.",index -2 is out of bounds for axis 0 with size 0
+MWRK,itermebuyprice2,2023-04-06 19:12:22,2023-04-05,"Metaworks Platforms, Inc.",index -2 is out of bounds for axis 0 with size 0
+MLVF,itermebuyprice2,2023-04-06 12:38:35,2023-04-05,"Malvern Bancorp, Inc.",index -2 is out of bounds for axis 0 with size 0
+N.A.,itermebuyprice2,2023-04-06 09:35:12,2023-04-05,South Dakota Soybean Processors LLC,index -2 is out of bounds for axis 0 with size 0
+STRC,itermebuyprice2,2023-03-31 20:24:39,2023-04-05,Sarcos Technology & Robotics Corp,index -2 is out of bounds for axis 0 with size 0
+CURO,itermebuyprice2,2023-04-05 18:44:11,2023-04-05,Curo Group Holdings Corp.,index -2 is out of bounds for axis 0 with size 0
+BRDS,itermebuyprice2,2023-04-05 16:36:11,2023-04-05,"Bird Global, Inc.",index -2 is out of bounds for axis 0 with size 0
+TBMCU,itermebuyprice2,2023-04-05 11:31:21,2023-04-05,Trailblazer Merger Corp I,index -2 is out of bounds for axis 0 with size 0
+CVLY,itermebuyprice2,2023-03-25 13:25:39,2023-04-05,Codorus Valley Bancorp Inc,index -2 is out of bounds for axis 0 with size 0
+ATVI,itermebuyprice2,2023-04-04 17:04:39,2023-03-29,"Activision Blizzard, Inc.",index -2 is out of bounds for axis 0 with size 0
+PFHC,itermebuyprice2,2023-04-01 13:18:28,2023-04-04,Profrac Holding Corp.,index -2 is out of bounds for axis 0 with size 0
+GLT,itermebuyprice2,2023-04-01 16:16:56,2023-03-31,Glatfelter Corp,index -2 is out of bounds for axis 0 with size 0
+AE,itermebuyprice2,2023-03-29 16:53:35,2023-03-31,"Adams Resources & Energy, Inc.",index -2 is out of bounds for axis 0 with size 0
+TRSSF,itermebuyprice2,2023-03-25 13:18:13,2023-03-31,Terrascend Corp.,index -2 is out of bounds for axis 0 with size 0
+STNL,itermebuyprice2,2023-04-01 11:21:13,2023-03-30,Sentinel Energy Services Inc.,index -2 is out of bounds for axis 0 with size 0
+DICE,itermebuyprice2,2023-03-28 17:01:02,2023-03-30,"Dice Therapeutics, Inc.",index -2 is out of bounds for axis 0 with size 0
+MIRO,itermebuyprice2,2023-03-31 16:56:36,2023-03-30,Miromatrix Medical Inc.,index -2 is out of bounds for axis 0 with size 0
+ABST,itermebuyprice2,2023-03-25 16:33:29,2023-03-30,Absolute Software Corp,index -2 is out of bounds for axis 0 with size 0
+KNWN,itermebuyprice2,2023-03-31 16:15:14,2023-03-30,"Know Labs, Inc.",index -2 is out of bounds for axis 0 with size 0
+PRTK,itermebuyprice2,2023-03-30 16:31:10,2023-03-30,"Paratek Pharmaceuticals, Inc.",index -2 is out of bounds for axis 0 with size 0
+CMRX,itermebuyprice2,2023-03-30 12:41:51,2023-03-30,Chimerix Inc,index -2 is out of bounds for axis 0 with size 0
+FSR,itermebuyprice2,2023-03-29 19:21:25,2023-03-29,Fisker Inc./de,index -2 is out of bounds for axis 0 with size 0
+SDPI,itermebuyprice2,2023-03-29 17:32:57,2023-03-29,"Superior Drilling Products, Inc.",index -2 is out of bounds for axis 0 with size 0
+ATSG,itermebuyprice2,2023-03-25 13:49:25,2023-03-29,"Air Transport Services Group, Inc.",index -2 is out of bounds for axis 0 with size 0
+UHALU,itermebuyprice2,2023-03-28 20:16:09,2023-03-27,U-Haul Holding Co /Nv/,index -2 is out of bounds for axis 0 with size 0
+HARP,itermebuyprice2,2023-03-28 17:37:00,2023-03-28,"Harpoon Therapeutics, Inc.",index -2 is out of bounds for axis 0 with size 0
+AZYO,itermebuyprice2,2023-03-28 16:17:11,2023-03-28,"Aziyo Biologics, Inc.",index -2 is out of bounds for axis 0 with size 0
+IVAC,itermebuyprice2,2023-03-28 16:08:04,2023-03-28,Intevac Inc,index -2 is out of bounds for axis 0 with size 0
+SZL.A,itermebuyprice2,2023-03-28 12:40:09,2023-03-28,Sezzle Inc.,index -2 is out of bounds for axis 0 with size 0
+AEL,itermebuyprice2,2023-03-25 17:13:19,2023-03-24,American Equity Investment Life Holding Co,index -2 is out of bounds for axis 0 with size 0

@@ -75,3 +75,60 @@ def find_blue_box(region, min_area=300):
     return (center_x, center_y)
 
 
+import pyautogui
+import numpy as np
+import cv2
+import pytesseract
+import time
+
+def find_and_click_year(target_year: str, region, confidence=0.85):
+    """
+    Tries to find and click the specified year string in the given region.
+    Falls back to OCR if template matching fails.
+    """
+    try:
+        # First try template match using screenshot
+        template = cv2.imread(f"{target_year}.png", cv2.IMREAD_GRAYSCALE)
+        screenshot = pyautogui.screenshot(region=region)
+        screenshot = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
+
+        result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
+        _, max_val, _, max_loc = cv2.minMaxLoc(result)
+
+        if max_val >= confidence:
+            x, y = max_loc
+            h, w = template.shape
+            click_x = region[0] + x + w // 2
+            click_y = region[1] + y + h // 2
+            pyautogui.moveTo(click_x, click_y)
+            time.sleep(.15)
+            pyautogui.click()
+            return True
+        else:
+            raise Exception(f"Low confidence ({max_val:.2f}) on {target_year}.png")
+
+    except Exception as e:
+        print(f"[Template Fail] {e}")
+        print("[Fallback] Using OCR to find year...")
+
+        # Fallback: OCR
+        screenshot = pyautogui.screenshot(region=region)
+        img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+        d = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
+
+        for i, text in enumerate(d['text']):
+            if text.strip() == target_year:
+                x = d['left'][i]
+                y = d['top'][i]
+                w = d['width'][i]
+                h = d['height'][i]
+                cx = region[0] + x + w // 2
+                cy = region[1] + y + h // 2
+                pyautogui.moveTo(cx, cy)
+                pyautogui.click()
+                return True
+
+        print(f"[OCR Fail] Could not find {target_year}")
+        return False
+
+
