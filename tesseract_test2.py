@@ -1,3 +1,4 @@
+#DEPRECATED, TESTING ONLY, DNU
 import pytesseract
 from PIL import Image
 import pyautogui
@@ -14,3 +15,5 @@ img = Image.open("monthchart_fulltest_2023apr.png")
 text = pytesseract.image_to_string(img)
 print("Detected text:")
 print(text)
+
+#weird. tbh.

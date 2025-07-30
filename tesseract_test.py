@@ -1,3 +1,4 @@
+#TESTING ONLY / DNU
 import pytesseract
 from PIL import Image
 import pyautogui
@@ -15,17 +16,11 @@ yearstr2 = "2023"
 # Optional: Explicitly set the Tesseract path if needed
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# Load an image and extract text
-img = Image.open("daterange_example.png")
-text = pytesseract.image_to_string(img)
 
-print("Detected text:")
-print(text)
 
 daterange_region = (930, 748, 248, 76) #carefully crafted
 screenshot = pyautogui.screenshot(region=daterange_region)
-screenshot.save("daterange_box.png")
-
+#screenshot.save("daterange_box.png") #for manual checking if needed
 ocr_text = pytesseract.image_to_string(screenshot)
 print(f"OCR result: {ocr_text}")
 
