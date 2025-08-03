@@ -7,7 +7,7 @@ def add_trade_to_mebuy_delay(df, trade_date_col='trade_date', mebuy_date_col='me
     ).dt.days
     return df
 
-def add_trade_to_mebuy_price_change(df, trade_price_col='trade_price', mebuy_price_col='mebuy_price'):
+def add_trade_to_mebuy_price_change(df, trade_price_col, mebuy_price_col='mebuy_price'):
     df['trade_to_mebuy_relpct'] = (
         df[mebuy_price_col] - df[trade_price_col]
     ) / df[trade_price_col]
