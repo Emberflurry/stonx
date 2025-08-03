@@ -2,7 +2,7 @@
 from tqdm import tqdm
 import pandas as pd
 import yfinance as yf
-def add_relative_prices(df, mebuy_col='mebuydate', ticker_col='ticker',windows=[1, 2, 3, 4, 5, 6, 10, 25, 50, 75, 125, 175, 225]):
+def add_relative_prices(df,mebuy_col='mebuydate', ticker_col='ticker',windows=[1, 2, 3, 4, 5, 6, 10, 25, 50, 75, 125, 175, 225]):
     # Define trading day offsets (negative = past, positive = future)
     offsets = windows
     past_cols = [f'p_m{n}_td' for n in offsets]
@@ -60,7 +60,7 @@ def add_relative_prices(df, mebuy_col='mebuydate', ticker_col='ticker',windows=[
                 df_out.at[i, f'p_p{offset}_td'] = future_price.item()
 
     return df_out
-#run
+#run usage
 # oip_with_prices_relative = add_relative_prices(oip_clean)
 # print(oip_with_prices_relative.head(1))
 # print(oip_with_prices_relative.columns)

@@ -21,8 +21,8 @@ def get_oip_1p(url):
     df["trade_date"] = pd.to_datetime(df["trade_date"], errors='coerce')
     df['filing_date'] = pd.to_datetime(df['filing_date'], errors='coerce')
     #set mebuydate = filing_date + 1 day
-    df["mebuydate"] = df["filing_date"] + pd.Timedelta(days=1)
-    df["trade_price"] = df["price"].replace('[$,]', '', regex=True).astype(float)
+    #df["mebuydate"] = df["filing_date"] + pd.Timedelta(days=1) #NO!!!! BAD - need stricter way of getting next TRADING DAY
+    df["insider_price"] = df["price"].replace('[$,]', '', regex=True).astype(float)
     df["qty"] = df["qty"].replace('[+,]', '', regex=True).astype(int)
     df["d_own_plus%"] = (
     df["δown"]
