@@ -26,29 +26,29 @@ def flag_first_failure(
 ):
     flags = []
     # Only check the *last* n columns in each list (lookback windows)
-    last_vol_cols = vol_cols[-last_n:]
-    last_price_cols = price_cols[-last_n:]
-    last_addv_cols = addv_cols[-last_n:]
+    first_vol_cols = vol_cols[:last_n]
+    first_price_cols = price_cols[:last_n]
+    first_addv_cols = addv_cols[:last_n]
 
     for _, row in df.iterrows():
         # 1. Zero volume
-        if any((row[v] == 0 or pd.isnull(row[v])) for v in last_vol_cols):
+        if any((row[v] == 0 or pd.isnull(row[v])) for v in first_vol_cols):
             flags.append('zero_volume')
             continue
         # 2. Zero price
-        if any(pd.isnull(row[p]) for p in last_price_cols):
+        if any(pd.isnull(row[p]) for p in first_price_cols):
             flags.append('zero_price')
             continue
         # 3. Low volume
-        if any(row[v] < min_volume for v in last_vol_cols):
+        if any(row[v] < min_volume for v in first_vol_cols):
             flags.append('low_vol')
             continue
         # 4. Low price
-        if any(row[p] < min_price for p in last_price_cols):
+        if any(row[p] < min_price for p in first_price_cols):
             flags.append('low_price')
             continue
         # 5. Low addv
-        if any(row[a] < min_addv or pd.isnull(row[a]) for a in last_addv_cols):
+        if any(row[a] < min_addv or pd.isnull(row[a]) for a in first_addv_cols):
             flags.append('low_addv')
             continue
         # Passes all checks
