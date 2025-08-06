@@ -1,23 +1,31 @@
 import pyautogui
 import pytesseract
-from PIL import Image
+#from PIL import Image
 import time
 import pandas as pd
-import cv2
-import numpy as np
+#import cv2
+#import numpy as np
 import keyboard
 import re
+from time import time
 
 # ---- CONFIG ---- #
 # Set these manually for your setup
-#FULLSCREEN WINDOW open, fullscreened
+#FULLSCREEN WINDOW open, fullscreened in pc window left
+#hardcoded for barchart.com singing machine Inc MICS w custom date range
+#https://www.barchart.com/stocks/quotes/MICS/interactive-chart
+#then open "Full Screen Chart" top right of screen
+#and Daily. removed gridlines and crosshairs, turned volume text black 
+start = time.time()
 
 CHART_TOP_LEFT = (117, 338)   # x, y of chart's top-left corner
 CHART_BOTTOM_RIGHT = (1816, 939)  # x, y of chart's bottom-right
-TOOLTIP_REGION = (392, 164, 300, 25)
+TOOLTIP_REGION = (392, 164, 300, 25) #deprecated
+OPEN_REGION = (410,164,59,25)
+HLC_REGION=(487,162,204,25)
 VOLUME_REGION = (270, 803, 100, 25)
 DATE_REGION = (58, 164, 150, 28)  # example: x, y, w, h for date
-HORIZONTAL_STEPS =CHART_BOTTOM_RIGHT[0]-CHART_TOP_LEFT[0] -5 #cushion
+HORIZONTAL_STEPS =CHART_BOTTOM_RIGHT[0]-CHART_TOP_LEFT[0] -3 #cushion
 STEP_SIZE = 1 #pixel each 
 #no formula needed lol^#int((CHART_BOTTOM_RIGHT[0] - CHART_TOP_LEFT[0]) / HORIZONTAL_STEPS)
 DELAY = 0 #TODO change faster
@@ -52,7 +60,7 @@ for i in range(HORIZONTAL_STEPS):
     text = pytesseract.image_to_string(
     date_img.convert('L'), config='--psm 7 -c tessedit_char_whitelist=0123456789.,'
 ).strip()
-    print(f"dateOCR: '{text}'")
+    #print(f"dateOCR: '{text}'")
     date = re.search(r'\d{8}',text)
     if date:
         date = date.group()
@@ -60,32 +68,29 @@ for i in range(HORIZONTAL_STEPS):
     else:
         date = None  # or set to date_text for debugging
 
-    # ---- Tooltip OCR (OHLC) ----
-    tooltip_img = pyautogui.screenshot(region=TOOLTIP_REGION)
-    text = pytesseract.image_to_string(
-        tooltip_img.convert('L'),
-        config='--psm 6 -c tessedit_char_whitelist=OHLC0123456789. '
+    # OCR for Open (O) value:
+    open_img = pyautogui.screenshot(region=OPEN_REGION)
+    open_text = pytesseract.image_to_string(
+        open_img.convert('L'),
+        config='--psm 7 -c tessedit_char_whitelist=0123456789.'
     ).strip()
-    print(f"OCR OHLC text: '{text}'")  # Debug
+    # Extract the first float from the Open region:
+    open_val_match = re.search(r'[0-9]*\.[0-9]+', open_text)
+    o_val = open_val_match.group() if open_val_match else None
 
-    # 1. Try to extract values by label
-    matches = re.findall(r'([OHLC])\s*([0-9]*\.[0-9]+)', text)
-    d = {k.lower(): v for k, v in matches}
+    # OCR for H, L, C values:
+    hlc_img = pyautogui.screenshot(region=HLC_REGION)
+    hlc_text = pytesseract.image_to_string(
+        hlc_img.convert('L'),
+        config='--psm 6 -c tessedit_char_whitelist=OHLC0123456789.'
+    ).strip()
+    # Extract numbers in order (should be H, L, C):
+    hlc_vals = re.findall(r'[0-9]*\.[0-9]+', hlc_text)
+    h_val, l_val, c_val = (hlc_vals + [None, None, None])[:3]
 
-    # 2. Fallback: If missing any of o/h/l/c, extract all numbers in order
-    nums = re.findall(r'[0-9]*\.[0-9]+', text)
-    if len(nums) == 4:
-        # Always assign by standard order
-        ohlc_keys = ['o', 'h', 'l', 'c']
-        for k, v in zip(ohlc_keys, nums):
-            d.setdefault(k, v)  # Don't overwrite existing matches
-    elif len(nums) == 3:
-        # Sometimes Open gets mangled, try best-effort mapping
-        ohlc_keys = ['h', 'l', 'c'] if 'o' not in d else ['o', 'h', 'c']
-        for k, v in zip(ohlc_keys, nums):
-            d.setdefault(k, v)
-
-    print(f"Extracted OHLC: {d}")
+    # Combine:
+    d = {'o': o_val, 'h': h_val, 'l': l_val, 'c': c_val}
+    #print(f"Extracted OHLC: {d}")
 
     # ---- Volume OCR ----
     vol_img = pyautogui.screenshot(region=VOLUME_REGION)
@@ -115,3 +120,4 @@ for i in range(HORIZONTAL_STEPS):
 df = pd.DataFrame(data)
 df.to_csv('mics_chart_ohlcv.csv', index=False)
 print("Saved to mics_chart_ohlcv.csv")
+print(f'runtime: {time.time()-start}s ({round((time.time()-start)/60,2)} min)')
