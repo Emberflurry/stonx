@@ -7,7 +7,7 @@ import pandas as pd
 #import numpy as np
 import keyboard
 import re
-from time import time
+import time
 
 # ---- CONFIG ---- #
 # Set these manually for your setup
@@ -118,6 +118,6 @@ for i in range(HORIZONTAL_STEPS):
         print(f"{i+1}/{HORIZONTAL_STEPS}|{date or 'No date'} | (duplicate or invalid, skipped)")
 # ---- Output ----
 df = pd.DataFrame(data)
-df.to_csv('mics_chart_ohlcv.csv', index=False)
-print("Saved to mics_chart_ohlcv.csv")
+df.to_csv('MICS Singing Machine Inc barchart.csv', index=False)
+print("Saved to MICS Singing Machine Inc barchart.csv")
 print(f'runtime: {time.time()-start}s ({round((time.time()-start)/60,2)} min)')

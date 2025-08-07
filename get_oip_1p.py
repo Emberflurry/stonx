@@ -57,6 +57,6 @@ def get_oip_1p(url):
     
     df['value'] = df['value'].replace(r'[+\$,]', '', regex=True).astype(float)
     #drop the price column
-    df = df.drop(columns=['price','deltaown'])
+    df = df.drop(columns=['price','deltaown','1d','1w','1m','6m'])
 
     return df
