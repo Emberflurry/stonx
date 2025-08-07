@@ -6,10 +6,6 @@ import get_oip_1p
 #importlib.reload(add_relative_prices2)
 importlib.reload(get_oip_1p)
 from get_oip_1p import *
-from datetime import timedelta
-import pandas as pd
-
-
 def openinsider_url(start_date, end_date, count=1000, page=1):
     """
     page shouldnt matter, it downloads the full data. 
@@ -71,30 +67,26 @@ def openinsider_url(start_date, end_date, count=1000, page=1):
     return url
 # Example usage:
 url = openinsider_url("05/01/2022", "05/10/2023",count=1000,page=1)
-print(url)
+#print(url)
 #works
 
 
-
+from datetime import timedelta
+import pandas as pd
 
 def get_all_openinsider_chunks(
     start,
     end,
     chunk_size=1000,
     window_days=25,
-    overlap_days=2
+    overlap_days=0
 ):
-    '''
-    overlap_days MUST NOT BE 2 OR MORE - gets stuck :(
-    input dates as yyyy-mm-dd
-    window_days is deprecated, ignore
-    '''
     all_chunks = []
     current_end = end
 
     while current_end > start:
         print(f"Fetching: {current_end.date()} back to {start.date()}")
-        url = openinsider_url(start, current_end, chunk_size)
+        url = openinsider_url(start-timedelta(days=1), current_end, chunk_size)
         df = get_oip_1p(url)
 
         if df.empty:
@@ -118,7 +110,12 @@ def get_all_openinsider_chunks(
     return all_df
 
 # Usage:
-# start = pd.Timestamp('2019-01-01')
-# end = pd.Timestamp('2025-08-06')
-# all_openinsider = get_all_openinsider_chunks(start, end, chunk_size=1000, window_days=45,overlap_days=2)
-# #3 is too much overlap (gets stuck at 3/20 - 3/17 2020)
+#start = pd.Timestamp('2019-01-01')
+#end = pd.Timestamp('2025-08-06')
+# all_openinsider = get_all_openinsider_chunks(start, end, 
+#                                              chunk_size=1000, 
+#                                              window_days=45,
+#                                              overlap_days=0)
+#3 is too much overlap (gets stuck at 3/20 - 3/17 2020)
+#2 is too much overlap gets stuck 3/13-11/2020
+#1 is too much, gets stuck near end i think
