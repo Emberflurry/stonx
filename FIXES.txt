@@ -1,0 +1,378 @@
+FIXES:
+put this shit into obsidian/something better for gawds sake sheesh.
+
+add: insider_price relative to 5d/30d/90d/245d price?
+	ie did they buy a dip?
+
+add: just avoid trades with filing_date wayyyy after trade_date?
+add: weight more heavily larger value insider buys (relative to stock total cap?) or tbh j absolute too
+add: price volatility looking back certain windows:For each lookback window (1, 5, 10, …, 245 days):
+
+ADD: maybe pull ohlcv for all tickers? huge tbh... dataset is alr 63MB... hmm
+
+
+
+Vol_close = close-to-close log-return std dev annualized 
+Vol_GK = Garman–Klass volatility for the same window.
+Vol_ratio = Vol_GK / Vol_close — a “volatility shape” indicator.
+
+add: number of price disconts (define as 'big' %changes?) up and down in past window(s)
+	-is sig a good est of this (discrete windows covers it? not really but might be aight to start with. can add this in later when i go all in, but a lot of data...)
+
+consider scheduled/regular insider buys... ie: TPL daily 1/10k buys...
+-does this mess w the model assumptions of signal?
+
+
+options: compare normal volatility of a ticker to volatility post-insider -- buy an options package ea time? have some algo to decide?
+
+backtesting - rolling backtesting w updating model? yearly upd? fine-tuning of model instead of full update from scratch?
+add- incorporate sell signals+cluster buys - more features
+	-number of, size of, %, recent window, returns since buy/sells?
+
+ONLY DROP NA for columns that im using - ie: dont drop rows lacking P+245d for no reason.
+
+monte-carlo conditionals after initial +/- binary ~10-30d classifier?
+-update daily w/ new OHLCV movements? minimize p(loss) and E[loss]
+
+add: z-score returns by ticker or use volatility-adjusted returns (returns/std) to make features comparable across tickers
+add: S&p500 recent movements/level as a grounder in the model
+
+add: Try a time-decay weighting so older data matters less in the split.
+
+Consider a quick SHAP values plot to see how the top features move predictions.
+
+MAKE A BARCHART daily ohlcv SCRAPER FOR OTHER SITES
+fintel? other free shit plEASE
+
+backtesting: time-based split (no random shuffle). Better: walk-forward CV (TimeSeriesSplit) or expanding window CV
+For trading: backtest P&L, Sharpe, max drawdown, turnover, transaction costs.
+
+Decision threshold: tune threshold not by accuracy but by expected return (P(event)*E[magnitude|event] - costs). Optimize threshold for net strategy return on validation.
+
+5 — Decision & trading rule ideas
+Screening rule: select trades with P(event in 15d) > thresh where thresh tuned by expected value.
+
+Dynamic exit: for a screened trade, use the conditional time-to-peak distribution to adaptively set a stop / take-profit: e.g., hold until predicted median time-to-peak, or until realized return > dynamic threshold.
+
+Expected value ranking: compute EV = P_event * E[magnitude | event at t*] for each candidate and rank.
+
+Position sizing: size by model confidence, inverse volatility, or Kelly-like rule (careful).
+
+add: make volume relative? to some average, so that some stocks dont wash out others in prediction. done ish - have a single feature m1/avg20d vol
+
+back: plot distribution of trade returns (make sure im not getting carried/dunked by outliers)
+
+7 — Suggested experiment roadmap (in order)
+Implement binary classifier for any positive in X=15 days using LightGBM; strict feature filter; time-based split.
+
+Evaluate classifier (AUC, Precision@k). If useful, compute expected value using a simple magnitude regressor (mean mag per bin).
+
+Build second-stage regression: on rows with y=1, predict time_to_peak or magnitude_at_peak. Use AFT or RSF for time or LightGBM for magnitude.
+
+Combine: for each candidate compute E(return by t) = P(event by t) * E[magnitude at event | predict t] and simulate simple strategy.
+
+Upgrade: discrete-time hazard model or RSF if you need more accurate timing. Try DeepHit if you have plenty of data and engineering resources.
+
+Run backtests with transaction costs, slippage, and position sizing. Check stability over time.
+
+F — Two-stage approach (recommended pragmatic path)
+Stage 1: Binary classifier or hazard model predicting P(event within X) or hazard curve.
+Stage 2: For rows predicted likely-to-event, fit a conditional model that predicts either time-to-event (AFT / RSF on the subset) or magnitude at event (regression).
+Pros: modular, interpretable, flexible; lets you control which subset you commit capital to.
+Cons: needs careful cross-validation to avoid information leakage across stages.
+
+G — Multi-task / multi-horizon (single model predicting multiple horizons)
+Train model to predict ret_p_p1, ret_p_p2, ..., ret_p_pX simultaneously (multioutput GBM or multihead NN).
+Pros: shared representation can improve sample efficiency; you get an expected path of returns.
+Cons: more complex; needs careful loss weighting.
+
+
+could do a screenshotter checker pyautogui - checks eeach step load..sucks tho
+
+or try to dload by getting the actual base api that ivcom draws from, and hitting that with the requests module from python
+
+Add- dif model idea - predict time til profitability? like survival curve/ratio/etc model? worth a try instead of fixed predictions. need to figure out how to assess model strength and reliability tho/variance.
+
+
+
+
+
+Nasdaq Data Link!
+Your API key is:
+Rq8xVmJKRqsLQrjyqkfX
+
+check single_positrader
+	return_col param doesn't get used...
+MAKE SURE model doesn't cheat!!!!!
+
+bruh def double check the nearest/date algo. make conservative. 
+need to manually ground truth and heavily scrutinize. looks really shitty/variant rn.
+	-NOTABLY: mebuydate / mdate / mpricedate MUST======
+ie: HMNF Hmn Financial Inc 2023-03-25 15:43:00 2023-04-27 
+is hella sus.... (mdate is before trade here... wrong fs^)
+
+done FIX ADD_RELATIVE_PRICES TO RUN ON BUSINESS DAYS!!!!!!!
+
+WHAT IS THE ANCHOR DATE? filing? mebuy? trade?
+
+
+WHY IS INVESTING > COM SO FUCKING SLOW AND CPU INTENSVIE AND LAGGY
+
+maybe employ a LLM agent to do the missing ticker searches?
+
+ie: for each that yf doesn't find:
+	-search 'investing.com full_corp_name + TICKER stock price history'
+	-pick the first/most likely investing.com link on google. copy that url. if no links are remotely likely, throw some sort of error so i go check manually
+
+
+Add filter before model gen:
+1) remove all signals from trade_price < 1/1.5/2 $
+2) remove all with low volume (2-week average prior to date?)
+	2a) and needs to have non-zero, substantial daily vol
+3) trade-to-filing duration >1week?1mo?1yr?
+	-look at the super long ones lol
+4) remove all that dont exist (ie: STNL was delisted in 2019 but had a weird insider blip in 2022 trade, 2023 filing - ez drop)
+
+GOOGLE SEARCH (STOCK) STOCK PRICE HISTORY 
+FOUND DELISTING GOOD SITES:
+	https://www.advfn.com/stock-market/NASDAQ/ACDC/historical
+	https://stockanalysis.com/actions/
+	investing.com VIA GOOGLE SEARCH NOT DIRECT BAR
+barchart.com 
+	free data up to 2yrs back from today / or premier
+seekingalpha.com
+companiesmarketcap  
+	gives delisting reason + date + source + new company merged
+stockinvestus
+https://www.tipranks.com/stocks/elut/historical-prices
+
+check out ceowatcher insta - had dece qualitative evals too tbh
+and unusualwhales? and other signal notif accs? test their results?
+integrate this info?
+
+
+paid: https://console.apify.com/actors/Qp19eFfCOKynv25Ra/input
+
+
+wait lowkey might need to incorporate Sell actions too - in rf. idk might not help a ton tho. just for training robustness so i dont pick mega losers.
+
+
+
+add: check out some other potential price indicators?
+	-see: https://fintel.io/chart/us/mics for ideas?
+
+figure out what fraction YF cant find listed/timezone/etc!!!
+failed instances of ticker downloads: 303 for 66 unique tickers. This is 15.94% of all tickers. And this is 30.30% of all insider trades in the OIP.(pulled from 2023 may from openinsider). here is some of the failed ones: failed tickers: ['AUGX', 'MTRY', 'SMMF', 'CEMI', 'AEL', 'OBSV', 'DICE',
+-most got delisted AT SOME POINT BETWEEN 2023/etc and NOW
+	-NEED TO GET THEIR PRICE DATA AND THE DATE OF DELISTING TBH
+	-make sure nowhere near my 5d prediction (or whatever forward model ends up best)
+		-ask google/some llm/database for delisting?
+		-volume usually drops post delisting...gotta sell well before then ideally... or just not buy
+		-or get paid the stock price (ie AUGX)
+		-pred delisting date? - even if cant, probably shouldn't buy? (unless most just pay out decently at delisting - but dont want to get stuck in volume trap)
+
+
+
+
+port all to python scripts/functions folder for easier use lol
+	-and just have a default header of imports for eztesting
+	-backup to GitHub fs fs - use ghdesktop
+
+MORE BACKTESTING RANGE
+(impt dates: 2008, 2019/2020mar - ask chat ab ideal range)
+
+make DATE RANGE DYNAMIC IN 1st fn for insider trade collection - for bigger backtesting!
+	-do block-based backtesting? - iterative updates to model pull pool too?
+
+delete 1d/1w/1m/6m cols from df early on
+
+add another feature: days between trade and filing/mebuy ?
+ADD feature: price return between trade and mebuy ?
+
+SENSITIVITY TESTING
+-BOTH:
+	-buy date open/close/high/low
+	-sell date open/close/high/low
+-can also do +- 1 day and/or^
+
+maybe also test: best fwdWindow for returns for TRADE date? and then if.. hmm
+
+MODEL: add days between filing and trade date as a feature
+-does conditioning model on this^ change the ideal forward trade window????
+
+
+
+- buy call/put options
+	-need call/put typical/actual pricing/premiums data
+	NO SHORTING
+- what duration to hold?
+	-figure out combo of:
+		 likelihood of going positive 
+		 estimated positive return magnitude
+
+add feature(s) SPY returns lookback 1/5/30//etc days? as market grounder?
+
+-add: look at cluster buys? (see openinsider) 
+
+to really remove risk of downside:
+	-1 run a logistic classifier/regression on pos vs neg returns, optimize
+	-2 AND run a linreg/multilinreg on those to est how big pos/neg returns
+	-then pick only those who POS(1) and STRONG POS(2)
+(check but lowkey thats what i think i currently have)
+
+later: dynamic meta-model that updates hold duration? see if that actually improves accuracy lol against base case
+
+
+mebuydate = filing date + 1 DONE
+mebuyprice = ^ close? DONE
+
+----
+
+-only use price (price at filing date!!) NOT START_PRICE (this is trade_date price - which we often dont get in time)
+	-fix this EARLY ON
+
+- make sure model input doesn't include output (duh)
+	-kinda sucky to check tho
+	-make sure is returns, returns
+
+- compare against s&p500 performance over time period for every single trade!
+
+-check buy price against real buy price
+-check sell price against real sell price
+
+
+-redo simple regression of lookback (returns) vs lookforward (returns)
+	-viz
+-redo matrix/heatmap^?
+
+- investigate tickers that YF says are delisted/cant find prices
+	-might need to avoid buying these, but cant? if model doesn't even train on them? mayb not an issue if super rare
+
+
+
+VALIDATION PROC: ------------------------------
+
+scale to more time windows, run multivariate tuning, or backtest realistic execution constraints (e.g. intraday fills, VWAP buying, etc.).
+If you scale up (e.g. $5k–$10k), double-check:
+
+Stock liquidity (e.g. float, avg volume)
+
+Spread and slippage
+
+Trading costs (commissions + bid-ask impact)
+
+✅ Use a capital constraint rule:
+Never trade more than 5% of average daily volume per stock.
+
+If avg daily volume = $25,000 → your max per trade = $1,250.
+
+✅ Add friction simulation:
+Assume slippage of $0.02–$0.10/share.
+
+Subtract this from entry and exit prices.
+
+ Part 1: Data Integrity Checks
+Lookahead Bias Elimination
+
+✅ Confirm you are only using past information at the time of prediction.
+
+❗ Check whether mebuy_price and lookback returns are based only on data available up to the trade date.
+
+Leakage Guarding
+
+Make sure forward prices (e.g., p_p5_td) aren't accidentally used in feature engineering or prediction.
+
+Missing Data Bias
+
+Delisted stocks are filtered — good — but check if this disproportionately removes failed trades.
+
+Consider: are the "bad" trades simply disappearing?
+
+📊 Part 2: Out-of-Sample Validation
+Train/Test Split by Time
+
+Split by date, not randomly — to simulate real-world usage. E.g.:
+
+Train on trades up to March 2023
+
+Test on trades from April 2023 onward
+
+python
+Copy
+Edit
+df_train = df[df['trade_date'] < '2023-04-01']
+df_test = df[df['trade_date'] >= '2023-04-01']
+Cross-Validation by Ticker
+
+Simulate leaving out tickers (or groups of tickers) and testing on them.
+
+Use GroupKFold by ticker or sector.
+
+Bootstrap Trade Resampling
+
+Sample 114 trades randomly (with replacement) 1000+ times.
+
+Compute mean PnL and CI vs SPY.
+
+🧠 Part 3: Model Realism Checks
+Feature Importance Review
+
+Plot .feature_importances_ of the model to understand what it’s relying on.
+
+Sanity check: does the model behave as you would expect for real traders?
+
+Shapley Value Visualization (SHAP)
+
+Use SHAP to visualize what factors are driving predictions at trade-level.
+
+This gives interpretability: is it all driven by one noisy feature?
+
+Sensitivity Analysis
+
+Slightly perturb qty, value, or a price input.
+
+Does the model's prediction flip irrationally?
+
+📉 Part 4: Null Hypothesis Testing
+Compare to Random Model
+
+Shuffle the r_p5_td column (i.e. simulate randomly guessing returns).
+
+Rerun full simulation with same model — should give near-zero edge.
+
+Compare to SPY-only Strategy
+
+Use same $100 trades at same dates in SPY.
+
+Benchmark both average return and volatility.
+
+Permutation Test on Features
+
+Shuffle individual feature columns.
+
+See how model performance degrades (shows which features actually matter).
+
+⚖️ Part 5: Deployment Realism
+Slippage and Bid-Ask Spread
+
+Model with a small loss (e.g., $0.02–$0.05/share) on every buy/sell.-See if alpha holds under friction.
+
+Liquidity Filter-Many of these names may be illiquid.
+Filter out trades where volume < $50k/day or spread > 1.5%.
+or limit purchase to <2% of daily volume
+
+Holding Period Overlap-Real trades can’t reuse the same capital on overlapping holding periods.
+
+---ACCOUNT
+
+manual to start
+fidelity? e trade? Charles schwab
+	-check ticker access/breadth
+	-commissions? fees?
+	-fractional shares allowed?
+	-trade limits?
+	-small account
+set up LLC to protect? for taxes?
+set up credit card with BofA? like noah?
+
+

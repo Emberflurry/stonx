@@ -1,0 +1,5 @@
+module load python/anaconda3
+conda create -n py313 python=3.13.5 -y
+conda activate py313
+python --version
+pip install --upgrade pandas numpy yfinance matplotlib statsmodels lightgbm sklearn
