@@ -3,9 +3,7 @@ If we’re confident the data split is strictly forward-looking (no target peeki
 
 Check feature importance now that features length matches model.feature_importances_ — could reveal the top drivers.
 
-Try a time-decay weighting so older data matters less in the split.
 
-Consider a quick SHAP values plot to see how the top features move predictions.
 
 
 
