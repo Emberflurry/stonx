@@ -1,31 +1,4 @@
-
-If we’re confident the data split is strictly forward-looking (no target peeking), the next steps could be:
-
-Check feature importance now that features length matches model.feature_importances_ — could reveal the top drivers.
-
-
-
-
-
-
-
-now next cell: help me build a pretty simple multiple regression model to predict returns from m returns, 
-
-filing_date	trade_date	ticker	company_name	insider_name	title	trade_type	qty	owned	value	insider_price	d_own_plus%_isnew	d_own_plus%	mebuydate	p_p1_td	v_p1_td	p_p2_td	v_p2_td	p_p3_td	v_p3_td	p_p4_td	v_p4_td	p_p5_td	v_p5_td	p_p6_td	v_p6_td	p_p7_td	v_p7_td	p_p8_td	v_p8_td	p_p9_td	v_p9_td	p_p10_td	v_p10_td	p_p15_td	v_p15_td	p_p20_td	v_p20_td	p_p35_td	v_p35_td	p_p60_td	v_p60_td	p_p90_td	v_p90_td	p_p130_td	v_p130_td	p_p180_td	v_p180_td	p_p245_td	v_p245_td	p_m1_td	v_m1_td	p_m2_td	v_m2_td	p_m3_td	v_m3_td	p_m4_td	v_m4_td	p_m5_td	v_m5_td	p_m6_td	v_m6_td	p_m7_td	v_m7_td	p_m8_td	v_m8_td	p_m9_td	v_m9_td	p_m10_td	v_m10_td	p_m15_td	v_m15_td	p_m20_td	v_m20_td	p_m35_td	v_m35_td	p_m60_td	v_m60_td	p_m90_td	v_m90_td	p_m130_td	v_m130_td	p_m180_td	v_m180_td	p_m245_td	v_m245_td	filing_price	mebuy_price	year	ret_p_p1_td	ret_p_p2_td	ret_p_p3_td	ret_p_p4_td	ret_p_p5_td	ret_p_p6_td	ret_p_p7_td	ret_p_p8_td	ret_p_p9_td	ret_p_p10_td	ret_p_p15_td	ret_p_p20_td	ret_p_p35_td	ret_p_p60_td	ret_p_p90_td	ret_p_p130_td	ret_p_p180_td	ret_p_p245_td	ret_p_m1_td	ret_p_m2_td	ret_p_m3_td	ret_p_m4_td	ret_p_m5_td	ret_p_m6_td	ret_p_m7_td	ret_p_m8_td	ret_p_m9_td	ret_p_m10_td	ret_p_m15_td	ret_p_m20_td	ret_p_m35_td	ret_p_m60_td	ret_p_m90_td	ret_p_m130_td	ret_p_m180_td	ret_p_m245_td
-
-Nice — great idea. Predicting when a trade’s return will first turn positive is naturally a time-to-event problem (a.k.a. survival / duration modeling) with censoring, and there are well-established methods for it. Below I’ll:
-
-Explain the modeling options and tradeoffs.
-
-Give a concrete plan (how to define the event, censoring, features, evaluation).
-
-Provide two starter implementations you can try quickly:
-
-a Cox proportional hazards model (continuous-time survival) using lifelines, and
-
-a discrete-time logistic formulation (easy, often robust, uses standard sklearn tools).
-
-Mention how to extend to predict magnitude as a bonus.
+a Cox proportional hazards model/regression/multistage reg? (continuous-time survival) using lifelines, and/or a discrete-time logistic formulation (easy, often robust, uses standard sklearn tools).
 
 1) Why this is a survival problem
 You want to predict the time until the first positive return (e.g., first t where return > 0).
@@ -36,41 +9,28 @@ Survival models naturally handle differing follow-up times and censoring.
 
 2) Modeling choices (short list + when to use)
 A. Cox Proportional Hazards (CoxPH)
-
 Semi-parametric; models hazard rate as h(t|x)=h0(t) * exp(Xβ).
-
 Outputs relative risk; can compute survival curves and concordance (C-index).
-
 Good baseline, interpretable coefficients.
-
 Assumes proportional hazards (checkable).
 
 B. Accelerated Failure Time (AFT)
-
 Parametric alternative (Weibull, log-normal). Predicts multiplicative effect on time.
-
 Useful if CoxPH assumptions fail.
 
 C. Random Survival Forest (RSF) / Survival Gradient-boosting (e.g., scikit-survival, xgboost survival version, sksurv)
-
 Nonlinear, handles interactions, robust to complex patterns and missingness (to some extent).
-
 Good if Cox/AFT underfit.
 
 D. Discrete-time survival via logistic regression (long-format)
-
 Convert each row into multiple rows (one per time interval up to max horizon).
-
 Fit a binary classifier for “event occurs at t” vs. not (conditional).
-
 Works with standard sklearn models (logistic, xgboost).
-
 Very flexible and simple to interpret; handles time-varying features easily.
 	B — Discrete-time (long-format) logistic classifier (sklearn)
 This converts each trade into up to max_horizon rows and trains a classifier that predicts event occurs at t (conditional on not happened before). Very flexible; you can use any classifier (logistic, xgboost).
 
 E. Deep/Neural time-to-event (DeepSurv, deep Cox, seq models)
-
 Powerful for very large datasets; more engineering needed.
 
 3) How to define the event and censoring (concrete)

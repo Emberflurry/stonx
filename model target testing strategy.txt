@@ -1,0 +1,24 @@
+dynamic TP/SL?based on predicted?
+yeah help me with sample-weighting negatives 2x. or maybe 1.5x?
+
+grid/rand cross val, learning curve viz, 
+feature impact - remove those that hurt model accuracy/precision
+(some sort of looping/iter testing) - give me the ones that help the most too (so i can gt more like them/to support/interactions?
+
+
+keep precision and accuracy super high (care less about recall tbh, prolly wil always be enough trades - i probably cant do all of them, would prefer consistent big.medium wins over many small wins i think?)
+
+tbh check if instead of stoploss and takeprofit if a naive=ish hold wins 
+	-check/viz/stat test:
+if a stock goes up after an insider trade, does it go back negative (in next 15 days?)
+	-ie can i remove the take-profit?
+if my classifier is super strong, does longer runout (hold) help me - ie just let the stock run out to like 6-14 days and sell instead of taking profit at like 10%?
+look at avg,median,distrib of hold dur w TPandSL currently?
+
+
+
+
+(p313) [f00569n@andes8 stonx1]$ time python -u te_tree_full.py   --features ./rawdata/trade_features.parquet   --targets  ./rawdata/trade_targets.parquet   --tp 0.10 --sl 0.06 --horizons_preferred 10,12,15   --max_features 550 --calibrate --mi_select  --sweep_min 0.30 --sweep_max 0.60 --sweep_steps 31
+
+
+okay cool. yes, winners overshoot the 10%TP, but under what timeframe? im also curious the distribution of the SL (i see that MAE is scary bad) that end up positive (like maybe they bounce super low but come back up (i know this is unlikely but i want to check how many do). can you also print out the basic distribution of the SL tth (and change the code so that the TP tth also does 1d bins) <=1d,2,3,4,5,6,7,8,9,10,11,12 (assuming i put 12 for preferred H). also printout avg return at (12) days as if there was no TP/SL - overall and for TP, SL, neither, groups. later i may look again at risk guardrails and two-policy,and calibration by regime, so remind me, but note that the reject band idea of .02 made the model worse. for the 12d run for thr=.9, the MFE TP group mean was .54 !!! holy crap. give me code to insert/replace to do the above, much more to do but we are on to something
